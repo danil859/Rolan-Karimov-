@@ -1,0 +1,42 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // Инициализация AOS
+    AOS.init({
+        duration: 800,
+        once: true,
+        easing: 'ease-out-quad'
+    });
+
+    const benefitCards = document.querySelectorAll('.benefit-card');
+    
+    function checkVisibility() {
+        benefitCards.forEach(card => {
+            const rect = card.getBoundingClientRect();
+            const isVisible = (rect.top <= window.innerHeight * 0.8);
+            
+            if (isVisible) {
+                const delay = card.getAttribute('data-delay') || 0;
+                setTimeout(() => {
+                    card.classList.add('visible');
+                }, delay);
+            }
+        });
+    }
+    
+    checkVisibility();
+    window.addEventListener('scroll', checkVisibility);
+
+    // Управление свечением при клике
+    benefitCards.forEach(card => {
+        card.addEventListener('click', function() {
+            benefitCards.forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // Отключаем свечение при клике вне карточек
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.benefit-card')) {
+            benefitCards.forEach(c => c.classList.remove('active'));
+        }
+    });
+});
